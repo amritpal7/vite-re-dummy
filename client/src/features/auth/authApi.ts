@@ -18,7 +18,7 @@ export const loginUser = async (credentials: {
 
 export const getCurrentUser = async (token: string | null) => {
   try {
-    const res = await fetch(`${endPoint}/auth/me`, {
+    const res = await fetch(`${endPoint}/api/auth/me`, {
       method: "GET",
       headers: { Authorization: `Bearer ${token}` },
       credentials: "include", // Include cookies (e.g., accessToken) in the request
