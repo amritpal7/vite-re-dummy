@@ -28,6 +28,20 @@ app.get("/api/test", (req, res) => {
         res.status(500).json(error.message);
     }
 });
+app.get("/api/products", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const response = yield fetch("https://dummyjson.com/products", {
+            method: "GET",
+            headers: { "Content-Type": "application/json" },
+        });
+        const data = yield response.json();
+        res.status(response.status).json(data);
+    }
+    catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "fetching failed.", message: error.message });
+    }
+}));
 app.post("/api/login", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const response = yield fetch("https://dummyjson.com/auth/login", {
