@@ -57,6 +57,7 @@ function CreateProduct({ onClose, isModal = false }: props) {
         </h2>
 
         <input
+          id="title"
           name="title"
           type="text"
           placeholder="Product title"
@@ -64,8 +65,10 @@ function CreateProduct({ onClose, isModal = false }: props) {
           onChange={handleChange}
           className="w-full p-3 text-sm rounded-md border-2 border-[#264143] shadow-[3px_4px_0px_1px_#e99f4c] focus:outline-none focus:translate-y-[1px] focus:shadow-[1px_2px_0px_0px_#e99f4c] placeholder:text-gray-500"
           required
+          autoComplete="title"
         />
         <input
+          id="description"
           name="description"
           type="text"
           placeholder="Product description"
@@ -73,8 +76,10 @@ function CreateProduct({ onClose, isModal = false }: props) {
           onChange={handleChange}
           className="w-full p-3 text-sm rounded-md border-2 border-[#264143] shadow-[3px_4px_0px_1px_#e99f4c] focus:outline-none focus:translate-y-[1px] focus:shadow-[1px_2px_0px_0px_#e99f4c] placeholder:text-gray-500"
           required
+          autoComplete="description"
         />
         <input
+          id="category"
           name="category"
           type="text"
           placeholder="Category"
@@ -82,8 +87,10 @@ function CreateProduct({ onClose, isModal = false }: props) {
           onChange={handleChange}
           className="w-full p-3 text-sm rounded-md border-2 border-[#264143] shadow-[3px_4px_0px_1px_#e99f4c] focus:outline-none focus:translate-y-[1px] focus:shadow-[1px_2px_0px_0px_#e99f4c] placeholder:text-gray-500"
           required
+          autoComplete="category"
         />
         <input
+          id="price"
           name="price"
           type="number"
           placeholder="Price"
@@ -91,15 +98,18 @@ function CreateProduct({ onClose, isModal = false }: props) {
           onChange={handleChange}
           className="w-full p-3 text-sm rounded-md border-2 border-[#264143] shadow-[3px_4px_0px_1px_#e99f4c] focus:outline-none focus:translate-y-[1px] focus:shadow-[1px_2px_0px_0px_#e99f4c] placeholder:text-gray-500"
           required
+          autoComplete="price"
         />
         <input
-          name="brand"
+          id="price"
+          name="price"
           type="text"
           placeholder="Brand name"
           value={formData.brand}
           onChange={handleChange}
           className="w-full p-3 text-sm rounded-md border-2 border-[#264143] shadow-[3px_4px_0px_1px_#e99f4c] focus:outline-none focus:translate-y-[1px] focus:shadow-[1px_2px_0px_0px_#e99f4c] placeholder:text-gray-500"
           required
+          autoComplete="price"
         />
 
         <button

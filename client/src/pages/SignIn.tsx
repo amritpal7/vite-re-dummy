@@ -59,6 +59,7 @@ const SignIn = () => {
               type="text"
               name="username"
               onChange={handleInputChange}
+              autoComplete="username"
             />
           </div>
           <div className="flex flex-col items-start my-2">
@@ -72,6 +73,7 @@ const SignIn = () => {
               type="password"
               name="password"
               onChange={handleInputChange}
+              autoComplete="password"
             />
           </div>
           <div className="flex flex-col items-center mt-4">

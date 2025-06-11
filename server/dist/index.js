@@ -15,11 +15,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
+const dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config();
+const localServer = process.env.LOCAL_SERVER;
+const prodServer = process.env.PROD_SERVER;
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
 app.use((0, cookie_parser_1.default)());
 app.use((0, cors_1.default)({
-    origin: ["http://localhost:5173", "https://vite-re-dummy.vercel.app"],
+    origin: [localServer, prodServer],
     credentials: true,
 }));
 app.get("/api/test", (req, res) => {
@@ -53,7 +57,6 @@ app.post("/api/login", (req, res) => __awaiter(void 0, void 0, void 0, function*
             body: JSON.stringify(req.body),
         });
         const data = yield response.json();
-        // Get cookie from dummyjson (not real but simulate if needed)
         const setCookie = response.headers.get("set-cookie");
         if (setCookie) {
             res.setHeader("Set-Cookie", setCookie); // Forward cookie
@@ -61,11 +64,10 @@ app.post("/api/login", (req, res) => __awaiter(void 0, void 0, void 0, function*
         res.status(response.status).json(data);
     }
     catch (error) {
-        console.error(error);
         res.status(500).json({ error: "Login failed.", message: error.message });
     }
 }));
-app.get("/auth/me", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+app.get("/api/auth/me", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const token = req.cookies.accessToken;
     try {
         const response = yield fetch("https://dummyjson.com/auth/me", {
