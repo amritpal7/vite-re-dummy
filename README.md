@@ -11,8 +11,10 @@
 ## Setup
 
 1. Clone the repository
-2. Install dependencies: `npm install`
-3. Start development server: `npm run dev`
+2. Goto /client run: `npm install`
+3. Goto /server run: `npm install`
+4. Inside root (/dummy-sdf) run: `npm install`
+5. Start development server: `npm run dev`
 
 ## Protected Routes
 
