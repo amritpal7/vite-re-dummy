@@ -9,3 +9,7 @@ services:
     envVars:
       - key: NODE_ENV
         value: production
+      - key: LOCAL_SERVER
+        value: http://localhost:5173
+      - key: PROD_SERVER
+        value: https://vite-re-dummy.vercel.app
