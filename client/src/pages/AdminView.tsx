@@ -6,25 +6,24 @@ import {
   FaChevronDown,
   FaChevronUp,
 } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 import CreateProduct from "./createProduct";
 import { ProductType } from "../types/productsType";
-import { useDispatch } from "react-redux";
-import { deleteProd } from "../features/products/productSlice";
-import { AppDispatch } from "../app/store";
-
-type User = {
-  id: number;
-  firstName: string;
-  lastName: string;
-  email: string;
-  username: string;
-};
+import { useDispatch, useSelector } from "react-redux";
+import { User } from "../types/user";
+import {
+  deleteProd,
+  fetchProducts,
+  updateProd,
+} from "../features/products/productSlice";
+import { AppDispatch, RootState } from "../app/store";
 
 type ModalType = "view" | "edit" | "delete" | "create" | null;
 type ModalContent = ProductType | User | null;
 
 function AdminView() {
-  const [products, setProducts] = useState<ProductType[]>([]);
+  const { products } = useSelector((state: RootState) => state.products);
+  const { user } = useSelector((state: RootState) => state.auth);
   const [users, setUsers] = useState<User[]>([]);
   const [showProducts, setShowProducts] = useState(true);
   const [showUsers, setShowUsers] = useState(false);
@@ -35,15 +34,22 @@ function AdminView() {
   const [editableData, setEditableData] = useState<any>({});
 
   const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
   useEffect(() => {
-    fetch("https://dummyjson.com/products?limit=12")
-      .then(res => res.json())
-      .then(data => setProducts(data.products));
+    if (!user) navigate("/login");
+    dispatch(fetchProducts())
+      .unwrap()
+      .then(() => closeModal())
+      .catch(error => console.log(error));
 
     fetch("https://dummyjson.com/users?limit=5")
       .then(res => res.json())
       .then(data => setUsers(data.users));
-  }, []);
+  }, [dispatch, user, navigate]);
+
+  useEffect(() => {
+    console.log("Updated product list:", products);
+  }, [products]);
 
   const openModal = (type: ModalType, content: ModalContent) => {
     setModalType(type);
@@ -64,23 +70,10 @@ function AdminView() {
   };
 
   const handleSave = () => {
-    const { id, title, description, brand } = editableData;
-    fetch(`https://dummyjson.com/products/${id}`, {
-      method: "PUT" /* or PATCH */,
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ title, description, brand }),
-    })
-      .then(res => res.json())
-      .then(updatedProduct => {
-        setProducts(prev =>
-          prev.map(p => (p.id === updatedProduct.id ? updatedProduct : p))
-        );
-      })
-      .catch(error => {
-        console.log(error);
-      });
-
-    closeModal();
+    dispatch(updateProd(editableData))
+      .unwrap()
+      .then(() => closeModal())
+      .catch(error => console.log(error));
   };
 
   return (
@@ -276,18 +269,18 @@ function AdminView() {
 
               <div className="space-y-3 text-sm">
                 {modalType === "create" ? (
-                  <CreateProduct
-                    onClose={closeModal}
-                    onAddProduct={newProduct => {
-                      setProducts(prev => [newProduct, ...prev]);
-                    }}
-                    isModal
-                  />
+                  <CreateProduct onClose={closeModal} isModal />
                 ) : modalType === "edit" ? (
                   Object.entries(editableData).map(([key, value]) => {
                     if (
-                      typeof value === "string" ||
-                      typeof value === "number"
+                      [
+                        "title",
+                        "price",
+                        "description",
+                        "category",
+                        "brand",
+                        "thumbnail",
+                      ].includes(key)
                     ) {
                       return (
                         <div key={key}>
@@ -296,12 +289,13 @@ function AdminView() {
                           </label>
                           <input
                             className="w-full mt-1 border px-3 py-2 rounded-md text-gray-700"
-                            value={value}
+                            value={value as string}
                             onChange={e => handleChange(key, e.target.value)}
                           />
                         </div>
                       );
                     }
+
                     return null;
                   })
                 ) : (
@@ -327,11 +321,12 @@ function AdminView() {
                 {modalType === "delete" && (
                   <button
                     onClick={() => {
-                      dispatch(deleteProd(editableData.id));
-                      setProducts(prev =>
-                        prev.filter(p => p.id !== editableData.id)
-                      );
-                      closeModal();
+                      dispatch(deleteProd(editableData.id))
+                        .unwrap()
+                        .then(() => {
+                          dispatch(fetchProducts());
+                          closeModal();
+                        });
                     }}
                     className="p-4 w-[290px] text-[15px] font-extrabold bg-[#d7434a] rounded-md shadow-[3px_3px_0px_0px_#e99f4c] hover:opacity-90 focus:translate-y-1 focus:shadow-[1px_2px_0px_0px_#e99f4c]"
                   >

@@ -1,5 +1,10 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { getProducts, createProduct, deleteProduct } from "./productsApi";
+import {
+  getProducts,
+  createProduct,
+  deleteProduct,
+  updateProduct,
+} from "./productsApi";
 import { ProductsType, ProductType } from "../../types/productsType";
 
 const initialState: ProductsType = {
@@ -29,6 +34,14 @@ export const deleteProd = createAsyncThunk(
   }
 );
 
+export const updateProd = createAsyncThunk(
+  "product/update",
+  async (product: ProductType) => {
+    const data = await updateProduct(product);
+    return data;
+  }
+);
+
 const productsSlice = createSlice({
   name: "products",
   initialState,
@@ -40,7 +53,13 @@ const productsSlice = createSlice({
       })
       .addCase(fetchProducts.fulfilled, (state, action) => {
         state.status = "idle";
-        state.products = action.payload;
+        const deletedIds: number[] = JSON.parse(
+          localStorage.getItem("deletedProducts") || "[]"
+        );
+        state.products = action.payload.filter(
+          (product: ProductType) =>
+            typeof product.id === "number" && !deletedIds.includes(product.id)
+        );
       })
       .addCase(fetchProducts.rejected, state => {
         state.status = "failed";
@@ -59,14 +78,26 @@ const productsSlice = createSlice({
         state.error = null;
       })
       .addCase(deleteProd.fulfilled, (state, action) => {
-        (state.status = "idle"),
-          (state.products = state.products.filter(
-            product => product.id !== action.payload
-          ));
+        state.status = "idle";
+        const existing = JSON.parse(
+          localStorage.getItem("deletedProducts") || "[]"
+        );
+        const id = action.meta.arg; // this is the actual ID you passed in
+        localStorage.setItem(
+          "deletedProducts",
+          JSON.stringify([...existing, id])
+        );
       })
       .addCase(deleteProd.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message || "Failed to delete the product.";
+      })
+      .addCase(updateProd.fulfilled, (state, action) => {
+        state.status = "idle";
+        const index = state.products.findIndex(p => p.id === action.payload.id);
+        if (index !== -1) {
+          state.products[index] = action.payload;
+        }
       });
   },
 });

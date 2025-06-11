@@ -36,3 +36,41 @@ export const deleteProduct = async (id: number) => {
     throw new Error(error);
   }
 };
+
+export const updateProduct = async (updatedProduct: ProductType) => {
+  const allowedFields = [
+    "title",
+    "description",
+    "price",
+    "discountPercentage",
+    "rating",
+    "stock",
+    "brand",
+    "category",
+    "thumbnail",
+    "images",
+  ];
+
+  const sanitizedProduct = allowedFields.reduce((obj, key) => {
+    if (key in updatedProduct) {
+      obj[key] = updatedProduct[key as keyof typeof updatedProduct];
+    }
+    return obj;
+  }, {} as Partial<ProductType>);
+
+  const res = await fetch(
+    `https://dummyjson.com/products/${updatedProduct.id}`,
+    {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(sanitizedProduct),
+    }
+  );
+  if (!res.ok) {
+    const errorText = await res.text();
+    console.error("Failed to update product:", errorText);
+    throw new Error("Error updating product.");
+  }
+
+  return await res.json();
+};

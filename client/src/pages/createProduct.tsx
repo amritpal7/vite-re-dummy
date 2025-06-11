@@ -8,10 +8,9 @@ import { ProductType } from "../types/productsType";
 interface props {
   onClose: () => void;
   isModal: boolean;
-  onAddProduct: (product: ProductType) => void;
 }
 
-function CreateProduct({ onClose, isModal = false, onAddProduct }: props) {
+function CreateProduct({ onClose, isModal = false }: props) {
   const [formData, setFormData] = useState<ProductType>({
     title: "",
     description: "",
@@ -32,7 +31,6 @@ function CreateProduct({ onClose, isModal = false, onAddProduct }: props) {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     await dispatch(createNewProduct(formData)).unwrap(); // wait for it to finish and catch errors if any
-    onAddProduct(formData);
     toast.success("Added successfully!");
     setFormData({
       title: "",
