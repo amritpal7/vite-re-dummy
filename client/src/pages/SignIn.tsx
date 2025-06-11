@@ -15,7 +15,11 @@ const SignIn = () => {
 
   useEffect(() => {
     if (user) {
-      navigate("/profile"); // redirect if logged in
+      const timer = setTimeout(() => {
+        navigate("/profile");
+      }, 1000);
+
+      return () => clearTimeout(timer);
     }
   }, [user, navigate]);
 
