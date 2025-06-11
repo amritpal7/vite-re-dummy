@@ -1,4 +1,4 @@
-const endPoint = import.meta.env.VITE_LOCAL_URL;
+const endPoint = import.meta.env.VITE_PROD_URL;
 
 export const loginUser = async (credentials: {
   username: string;
