@@ -87,7 +87,9 @@ app.get("/api/auth/me", async (req: Request, res: Response) => {
 
     res.status(response.status).json(data);
   } catch (error: any) {
-    res.status(401).json(error.message);
+    res
+      .status(500)
+      .json({ error: "Failed to fetch profile", message: error.message });
   }
 });
 
