@@ -28,13 +28,7 @@ function App() {
             <Route path="/about" element={<About />} />
             <Route
               path="/create-product"
-              element={
-                <CreateProduct
-                  onClose={() => {}}
-                  isModal={false}
-                  onAddProduct={() => {}}
-                />
-              }
+              element={<CreateProduct onClose={() => {}} isModal={false} />}
             />
             <Route path="/products/:id" element={<Product />} />
             <Route path="/dashboard" element={<Dashboard />} />
