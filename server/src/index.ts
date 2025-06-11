@@ -17,6 +17,22 @@ app.get("/api/test", (req: Request, res: Response) => {
   }
 });
 
+app.get("/api/products", async (req: Request, res: Response) => {
+  try {
+    const response = await fetch("https://dummyjson.com/products", {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    });
+
+    const data = await response.json();
+
+    res.status(response.status).json(data);
+  } catch (error: any) {
+    console.error(error);
+    res.status(500).json({ error: "fetching failed.", message: error.message });
+  }
+});
+
 app.post("/api/login", async (req: Request, res: Response) => {
   try {
     const response = await fetch("https://dummyjson.com/auth/login", {
