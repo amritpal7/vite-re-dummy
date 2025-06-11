@@ -1,6 +1,6 @@
 import express, { Request, Response } from "express";
 import cors from "cors";
-import cookiePasrser from "cookie-parser";
+import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -9,6 +9,7 @@ const prodServer = process.env.PROD_SERVER;
 
 const app = express();
 app.use(express.json());
+app.use(cookieParser());
 
 const allowedOrigins = [localServer!, prodServer!];
 
@@ -59,7 +60,6 @@ app.post("/api/login", async (req: Request, res: Response) => {
     });
 
     const data = await response.json();
-    console.log("from login route", data);
 
     const token = data.accessToken || data.token;
 
@@ -84,6 +84,8 @@ app.get("/api/auth/me", async (req: Request, res: Response) => {
       headers: { Authorization: `Bearer ${token}` },
     });
     const data = await response.json();
+
+    console.log("sdfdsf", data);
 
     res.status(response.status).json(data);
   } catch (error: any) {

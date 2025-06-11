@@ -23,7 +23,10 @@ export const getCurrentUser = async (token: string | null) => {
       headers: { Authorization: `Bearer ${token}` },
       credentials: "include", // Include cookies (e.g., accessToken) in the request
     });
+
     if (!res.ok) throw new Error("Error fetching user.");
+
+    console.log(await res.json());
 
     return await res.json();
   } catch (error: any) {
