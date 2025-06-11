@@ -63,7 +63,7 @@ app.post("/api/login", async (req: Request, res: Response) => {
 
     const token = data.accessToken || data.token;
 
-    res.cookie("myAccessToken", token, {
+    res.cookie("accessToken", token, {
       httpOnly: true,
       secure: true,
       sameSite: "none",
