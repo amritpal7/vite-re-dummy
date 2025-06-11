@@ -1,8 +1,10 @@
+const endPoint = import.meta.env.VITE_API_URL;
+
 export const loginUser = async (credentials: {
   username: string;
   password: string;
 }) => {
-  const res = await fetch("http://localhost:8000/api/login", {
+  const res = await fetch(`${endPoint}/api/login`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(credentials),
@@ -16,7 +18,7 @@ export const loginUser = async (credentials: {
 
 export const getCurrentUser = async (token: string | null) => {
   try {
-    const res = await fetch("http://localhost:8000/auth/me", {
+    const res = await fetch(`${endPoint}/auth/me`, {
       method: "GET",
       headers: { Authorization: `Bearer ${token}` },
       credentials: "include", // Include cookies (e.g., accessToken) in the request

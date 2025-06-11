@@ -1,8 +1,7 @@
 import { ProductType } from "../../types/productsType";
 
-const endPoint = import.meta.env.VITE_API_URL;
 export const getProducts = async () => {
-  const res = await fetch(`${endPoint}/products`, {
+  const res = await fetch("https://dummyjson.com/products/", {
     method: "GET",
     headers: { "Content-Type": "application/json" },
   });
