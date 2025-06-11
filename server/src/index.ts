@@ -61,7 +61,7 @@ app.post("/api/login", async (req: Request, res: Response) => {
   }
 });
 
-app.get("/auth/me", async (req: Request, res: Response) => {
+app.get("/api/auth/me", async (req: Request, res: Response) => {
   const token = req.cookies.accessToken;
   try {
     const response = await fetch("https://dummyjson.com/auth/me", {
