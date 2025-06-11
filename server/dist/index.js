@@ -22,8 +22,16 @@ const prodServer = process.env.PROD_SERVER;
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
 app.use((0, cookie_parser_1.default)());
+const allowedOrigins = [localServer, prodServer];
 app.use((0, cors_1.default)({
-    origin: [localServer, prodServer],
+    origin: function (origin, callback) {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        }
+        else {
+            callback(new Error("Not allowed by CORS"));
+        }
+    },
     credentials: true,
 }));
 app.get("/api/test", (req, res) => {
@@ -57,10 +65,13 @@ app.post("/api/login", (req, res) => __awaiter(void 0, void 0, void 0, function*
             body: JSON.stringify(req.body),
         });
         const data = yield response.json();
-        const setCookie = response.headers.get("set-cookie");
-        if (setCookie) {
-            res.setHeader("Set-Cookie", setCookie); // Forward cookie
-        }
+        const token = data.accessToken || data.token;
+        res.cookie("accessToken", token, {
+            httpOnly: true,
+            secure: true,
+            sameSite: "none",
+            maxAge: 24 * 60 * 60 * 1000, // 1 day
+        });
         res.status(response.status).json(data);
     }
     catch (error) {
@@ -75,10 +86,13 @@ app.get("/api/auth/me", (req, res) => __awaiter(void 0, void 0, void 0, function
             headers: { Authorization: `Bearer ${token}` },
         });
         const data = yield response.json();
+        console.log("sdfdsf", data);
         res.status(response.status).json(data);
     }
     catch (error) {
-        res.status(401).json(error.message);
+        res
+            .status(500)
+            .json({ error: "Failed to fetch profile", message: error.message });
     }
 }));
 app.listen(8000, () => console.log("Server running!"));
