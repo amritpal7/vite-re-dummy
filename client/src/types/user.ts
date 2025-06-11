@@ -35,5 +35,4 @@ export type AuthState = {
   user: any | null;
   status: "idle" | "loading" | "failed";
   error: string | null;
-  currentUser: User | null;
 };

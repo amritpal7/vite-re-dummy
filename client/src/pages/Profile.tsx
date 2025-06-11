@@ -7,12 +7,12 @@ import { useNavigate } from "react-router-dom";
 
 const Profile = () => {
   const [activeTab, setActiveTab] = useState("Profile");
-  const { status, currentUser } = useSelector((state: RootState) => state.auth);
+  const { status, user } = useSelector((state: RootState) => state.auth);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!currentUser && status !== "loading") navigate("/login");
-  }, [currentUser, navigate, status]);
+    if (!user && status === "idle") navigate("/login");
+  }, [user, navigate, status]);
 
   return (
     <div className="flex items-center justify-center mt-30 p-6">
@@ -24,7 +24,7 @@ const Profile = () => {
           </h3>
           <h5 className="text-gray-600 text-lg">
             Welcome back,{" "}
-            <span className="font-semibold">{currentUser?.username}</span>
+            <span className="font-semibold">{user?.username}</span>
           </h5>
         </div>
 
@@ -52,16 +52,16 @@ const Profile = () => {
               {/* Avatar Section */}
               <div className="flex flex-col items-center text-center md:border-r-2 border-[#e99f4c] pr-8">
                 <div className="w-32 h-32 flex items-center justify-center rounded-full border-4 border-[#e99f4c] bg-gradient-to-r from-[#de5499] to-[#e99f4c] text-white shadow-lg">
-                  {currentUser ? (
-                    <img src={currentUser.image} alt="user image" />
+                  {user ? (
+                    <img src={user.image} alt="user image" />
                   ) : (
                     <CiUser className="text-4xl" />
                   )}
                 </div>
                 <h4 className="mt-4 text-xl font-semibold text-[#264143]">
-                  {currentUser?.firstName} {currentUser?.lastName}
+                  {user?.firstName} {user?.lastName}
                 </h4>
-                <p className="text-gray-600 text-sm">{currentUser?.email}</p>
+                <p className="text-gray-600 text-sm">{user?.email}</p>
               </div>
               {/* User Info Section */}
               <div className="flex-1">
@@ -69,33 +69,30 @@ const Profile = () => {
                   <div>
                     <h6 className="font-semibold">Full Name:</h6>
                     <p className="text-gray-700">
-                      {currentUser?.firstName} {currentUser?.lastName}
+                      {user?.firstName} {user?.lastName}
                     </p>
                   </div>
                   <div>
                     <h6 className="font-semibold">name:</h6>
                     <p className="text-gray-700">
                       {" "}
-                      {currentUser?.maidenName || "N/A"}
+                      {user?.maidenName || "N/A"}
                     </p>
                   </div>
                   <div>
                     <h6 className="font-semibold">Gender:</h6>
-                    <p className="text-gray-700">{currentUser?.gender}</p>
+                    <p className="text-gray-700">{user?.gender}</p>
+                  </div>
+                  <div>
+                    <h6 className="font-semibold">Phone:{user?.phone}</h6>
                   </div>
                   <div>
                     <h6 className="font-semibold">
-                      Phone:{currentUser?.phone}
-                    </h6>
-                  </div>
-                  <div>
-                    <h6 className="font-semibold">
-                      Location: {currentUser?.address?.address}
+                      Location: {user?.address?.address}
                     </h6>
                     <p className="text-gray-700">
-                      {currentUser?.address?.city},{" "}
-                      {currentUser?.address?.stateCode}(
-                      {currentUser?.address?.country})
+                      {user?.address?.city}, {user?.address?.stateCode}(
+                      {user?.address?.country})
                     </p>
                   </div>
                 </div>

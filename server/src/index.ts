@@ -85,8 +85,6 @@ app.get("/api/auth/me", async (req: Request, res: Response) => {
     });
     const data = await response.json();
 
-    console.log("sdfdsf", data);
-
     res.status(response.status).json(data);
   } catch (error: any) {
     res

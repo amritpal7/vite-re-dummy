@@ -14,7 +14,7 @@ const SignIn = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (user) {
+    if (user && status === "loading") {
       const timer = setTimeout(() => {
         navigate("/profile");
       }, 1000);
@@ -36,6 +36,7 @@ const SignIn = () => {
       await dispatch(currentUser());
 
       setForm({ username: "", password: "" });
+      navigate("/profile");
       toast.success("Logged in successfully");
     } catch (error: any) {
       setForm({ username: "", password: "" });

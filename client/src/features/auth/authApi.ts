@@ -1,4 +1,4 @@
-const endPoint = import.meta.env.VITE_PROD_URL;
+const endPoint = import.meta.env.VITE_LOCAL_URL;
 
 export const loginUser = async (credentials: {
   username: string;
@@ -25,8 +25,6 @@ export const getCurrentUser = async (token: string | null) => {
     });
 
     if (!res.ok) throw new Error("Error fetching user.");
-
-    console.log(await res.json());
 
     return await res.json();
   } catch (error: any) {

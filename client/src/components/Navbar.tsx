@@ -10,7 +10,7 @@ import { FaProductHunt } from "react-icons/fa";
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
-  const { user, currentUser } = useSelector((state: RootState) => state.auth);
+  const { user } = useSelector((state: RootState) => state.auth);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -90,7 +90,7 @@ const Navbar = () => {
                     >
                       Profile
                     </Link>
-                    {currentUser && currentUser.role === "admin" && (
+                    {user && user.role === "admin" && (
                       <>
                         <Link
                           to="/dashboard"

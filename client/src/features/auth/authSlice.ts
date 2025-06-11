@@ -10,7 +10,6 @@ const initialState: AuthState = {
   user: null,
   status: "idle",
   error: null,
-  currentUser: null,
 };
 
 export const login = createAsyncThunk(
@@ -22,7 +21,7 @@ export const login = createAsyncThunk(
 );
 
 export const currentUser = createAsyncThunk("auth/me", async (_, thunkAPI) => {
-  const state: any = thunkAPI.getState() || localStorage.getItem(tokenKey);
+  const state: any = thunkAPI.getState();
   const token = state.auth.token;
   const data = await getCurrentUser(token);
   return data;
@@ -33,7 +32,7 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     logout(state) {
-      (state.token = null), (state.user = null), (state.currentUser = null);
+      (state.token = null), (state.user = null);
       localStorage.removeItem(tokenKey);
     },
   },
@@ -60,7 +59,7 @@ const authSlice = createSlice({
       })
       .addCase(currentUser.fulfilled, (state, action) => {
         (state.status = "idle"),
-          (state.currentUser = action.payload),
+          (state.user = action.payload),
           (state.error = null);
       })
       .addCase(currentUser.rejected, (state, action) => {
