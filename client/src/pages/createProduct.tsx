@@ -101,15 +101,15 @@ function CreateProduct({ onClose, isModal = false }: props) {
           autoComplete="price"
         />
         <input
-          id="price"
-          name="price"
+          id="brand"
+          name="brand"
           type="text"
           placeholder="Brand name"
           value={formData.brand}
           onChange={handleChange}
           className="w-full p-3 text-sm rounded-md border-2 border-[#264143] shadow-[3px_4px_0px_1px_#e99f4c] focus:outline-none focus:translate-y-[1px] focus:shadow-[1px_2px_0px_0px_#e99f4c] placeholder:text-gray-500"
           required
-          autoComplete="price"
+          autoComplete="brand"
         />
 
         <button

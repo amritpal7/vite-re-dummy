@@ -39,18 +39,7 @@ export const deleteProduct = async (id: number) => {
 };
 
 export const updateProduct = async (updatedProduct: ProductType) => {
-  const allowedFields = [
-    "title",
-    "description",
-    "price",
-    "discountPercentage",
-    "rating",
-    "stock",
-    "brand",
-    "category",
-    "thumbnail",
-    "images",
-  ];
+  const allowedFields = ["title", "description", "price", "brand", "category"];
 
   const sanitizedProduct = allowedFields.reduce((obj, key) => {
     if (key in updatedProduct) {
